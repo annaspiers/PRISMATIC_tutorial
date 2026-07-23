@@ -1,0 +1,11 @@
+{
+    "python-envs.defaultEnvManager": "ms-python.python:conda",
+    "python-envs.defaultPackageManager": "ms-python.python:conda",
+    "python.defaultInterpreterPath": "/Users/AISpiers/anaconda3/envs/prismatic_tutorial/bin/python",
+    "python.envFile": "${workspaceFolder}/.env",
+    "python.terminal.activateEnvironment": true,
+    "terminal.integrated.env.osx": {
+        "R_HOME": "/Users/AISpiers/anaconda3/envs/prismatic_tutorial/lib/R",
+        "PATH": "/Users/AISpiers/anaconda3/envs/prismatic_tutorial/bin:${env:PATH}"
+    }
+}

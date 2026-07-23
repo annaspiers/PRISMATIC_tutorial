@@ -1,0 +1,54 @@
+name: prismatic_tutorial
+channels:
+  - conda-forge
+  - r
+  - bioconda
+dependencies:
+  - python=3.10
+  - pdal
+  - python-pdal
+  - gdal
+  - folium
+  - mapclassify
+  - matplotlib
+  - tensorflow
+  - seaborn
+  - scipy
+  - r-base=4.4
+  - r-devtools
+  - r-sf
+  - r-ggplot2
+  - r-dplyr
+  - r-caret
+  - r-cowplot
+  - r-rfUtilities
+  - r-gridextra
+  - r-lidR
+  - r-neonutilities
+  - rpy2
+  - r-randomForest
+  - r-assertthat
+  - r-limsolve
+  - r-rjson
+  - r-stringr
+  - r-tidyr #pivot_longer()
+  - r-neonOS
+  - r-terra>=1.8.5
+  - r-glue
+  - r-readr
+  - bioconductor-rhdf5
+  - fiona
+  - pip
+  - pip:
+    - gdown
+    - pygbif
+    - geopandas
+    - tqdm
+    - laspy[lazrs, laszip]
+    - open3d
+    - scikit-learn
+    - hydra-core
+    - hydra_colorlog
+    - ray[default]
+    - hy-tools
+    - rasterio

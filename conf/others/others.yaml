@@ -1,0 +1,22 @@
+neon_trait_table:
+  neon_trait_link: https://drive.google.com/file/d/1aaq69JEKLCMPzZMUAa_DZt4b0850Q1PS/view?usp=sharing
+  force_rerun: False
+
+# Function arguments to change manually
+# use_case: "predict"     # train, predict
+ic_type: "rs_wall2wall" # field_inv_plots, rs_inv_plots, rs_tower_ftpt, rs_random_plots, rs_wall2wall ais is this only used when use_case=predict?
+hs_type: "tile"         # tile, flightline
+month_window: 16 #collect NEON inventory data within this many months from NEON AOP flight
+n_plots: 1000
+plot_length: 100
+px_thresh: 2
+ntree: 5000
+min_distance: 20
+use_tiles_w_veg: False #turn this to false in order to stack imagery across entire flight box
+randomMinSamples: False
+aggregate_from_1m_to_2m_res: False
+independentValidationSet: True
+pcaInsteadOfWavelengths: True
+multisite: False #generate a single patch file for multiple sites? eg Danielle's work. Should only be true when the ic_type is rs_*
+coords_bbox: [] # one SJER tile [258000, 259000, 4108000, 4109000] #all of SJER 2021 [253000, 260000, 4107000, 4110000]
+#mach: "pm-cpu" #local or pm-cpu - is this workflow being run on one's local computer or Perlmutter?
