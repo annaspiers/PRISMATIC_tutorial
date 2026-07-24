@@ -35,5 +35,8 @@ RUN . /opt/conda/etc/profile.d/conda.sh && conda activate prismatic_tutorial && 
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/jovyan/.bash_profile && \
     echo "conda activate prismatic_tutorial"   >> /home/jovyan/.bash_profile
 
+# Copy the Jupyter configuration into the image.
+COPY --chown=1000:100 jupyter_notebook_config.json /opt/conda/etc/jupyter/jupyter_notebook_config.json
+
 # Restore the data-store working dir used by VICE.
 WORKDIR /home/jovyan/data-store
