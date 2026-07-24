@@ -1,0 +1,4 @@
+# Keep the Docker build context tiny — only environment.yml is needed to build the image.
+# (The Dockerfile itself is read via -f and is unaffected by this file.)
+*
+!environment.yml
