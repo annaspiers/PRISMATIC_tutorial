@@ -1,5 +1,4 @@
-# Keep the Docker build context tiny — only these files are needed to build the image.
-# (The Dockerfile itself is read via -f and is unaffected by this file.)
-*
-!environment.yml
-!jupyter_notebook_config.json
+.dockerignore
+CYVERSE.MD
+Dockerfile
+Justfile

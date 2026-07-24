@@ -15,6 +15,10 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
         libxml2-dev && \
     apt-get clean && rm -rf /var/lib/apt/lists/*
 
+# Copy entry script
+COPY entry.sh /bin
+RUN sudo chmod +x /bin/entry.sh
+
 # ---- Conda env + kernels (jovyan owns /opt/conda in the Jupyter base image) ----
 USER jovyan
 WORKDIR /home/jovyan
@@ -33,10 +37,13 @@ RUN . /opt/conda/etc/profile.d/conda.sh && conda activate prismatic_tutorial && 
 
 # Default new terminals to the env.
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/jovyan/.bash_profile && \
-    echo "conda activate prismatic_tutorial"   >> /home/jovyan/.bash_profile
+    echo "conda activate prismatic_tutorial"   >> /home/jovyan/.bash_profilej
 
 # Copy the Jupyter configuration into the image.
 COPY --chown=1000:100 jupyter_notebook_config.json /opt/conda/etc/jupyter/jupyter_notebook_config.json
+
+# Copy the contents of this repository into the image.
+COPY --chown=1000:100 . /home/jovyan/PRISMATIC_tutorial
 
 # Restore the data-store working dir used by VICE.
 WORKDIR /home/jovyan/data-store
