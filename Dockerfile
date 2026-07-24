@@ -28,8 +28,8 @@ RUN mamba env create -f /home/jovyan/environment.yml && \
 # Register the env's Python and R kernels with the already-installed JupyterLab.
 # Run as jovyan so --user kernels land in jovyan's home where JupyterLab finds them.
 RUN . /opt/conda/etc/profile.d/conda.sh && conda activate prismatic_tutorial && \
-    python -m ipykernel install --user --name prismatic_tutorial --display-name "PRISMATIC (Python)" && \
-    R --quiet -e "IRkernel::installspec(name = 'prismatic_r', displayname = 'PRISMATIC (R)')"
+    python -m ipykernel install --prefix /opt/conda --name prismatic_tutorial --display-name "PRISMATIC (Python)" && \
+    R --quiet -e "IRkernel::installspec(name = 'prismatic_r', displayname = 'PRISMATIC (R)', prefix = '/opt/conda')"
 
 # Default new terminals to the env.
 RUN echo ". /opt/conda/etc/profile.d/conda.sh" >> /home/jovyan/.bash_profile && \
