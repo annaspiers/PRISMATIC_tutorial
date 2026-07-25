@@ -2,3 +2,7 @@
 CYVERSE.MD
 Dockerfile
 Justfile
+
+# Test artifacts (downloaded NEON data / pipeline outputs) — keep them out of the build context.
+data/
+outputs/

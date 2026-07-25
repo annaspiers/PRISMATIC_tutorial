@@ -29,6 +29,12 @@ RUN mamba env create -f /home/jovyan/environment.yml && \
     mamba install -n prismatic_tutorial -y ipykernel r-irkernel && \
     mamba clean -afy
 
+# geoNEON is GitHub-only (not on CRAN or conda). Its imports are provided via conda
+# (see environment.yml), so build just the package itself without touching the
+# conda-managed dependency tree. remotes comes from the r-remotes conda package.
+RUN . /opt/conda/etc/profile.d/conda.sh && conda activate prismatic_tutorial && \
+    R --quiet -e "remotes::install_github('NEONScience/NEON-geolocation/geoNEON', dependencies = FALSE, upgrade = 'never')"
+
 # Register the env's Python and R kernels with the already-installed JupyterLab.
 # Run as jovyan so --user kernels land in jovyan's home where JupyterLab finds them.
 RUN . /opt/conda/etc/profile.d/conda.sh && conda activate prismatic_tutorial && \
@@ -47,6 +53,9 @@ COPY --chown=1000:100 jupyter_notebook_config.json /opt/conda/etc/jupyter/jupyte
 
 # Copy the contents of this repository into the image.
 COPY --chown=1000:100 . /home/jovyan/PRISMATIC_tutorial
+
+# Set an environment variable for the tutorial home directory.
+ENV TUTORIAL_HOME=/home/jovyan/data-store/PRISMATIC_tutorial
 
 # Restore the data-store working dir used by VICE.
 WORKDIR /home/jovyan/data-store

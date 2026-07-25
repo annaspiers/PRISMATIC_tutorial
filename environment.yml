@@ -16,6 +16,7 @@ dependencies:
   - scipy
   - r-base=4.4
   - r-devtools
+  - r-remotes
   - r-sf
   - r-ggplot2
   - r-dplyr
@@ -36,6 +37,18 @@ dependencies:
   - r-terra>=1.8.5
   - r-glue
   - r-readr
+  - r-forcats
+  - r-future
+  - r-purrr
+  - r-tidyselect
+  - r-biocmanager
+  # geoNEON (installed from GitHub in the Dockerfile) imports these; provide them
+  # via conda so the GitHub build compiles only geoNEON itself.
+  - r-plyr
+  - r-httr
+  - r-curl
+  - r-data.table
+  - r-jsonlite
   - bioconductor-rhdf5
   - fiona
   - pip

@@ -32,7 +32,9 @@ def download_trait_table(download_link, data_path):
     if not os.path.exists(data_path):
         os.makedirs(data_path)
     output_path = str(Path(data_path)/'NEON_trait_table.csv')
-    gdown.download(download_link, output_path, quiet=False, fuzzy=True)
+    # gdown >= 6 made fuzzy URL matching the default and removed the `fuzzy` kwarg,
+    # so a full Google Drive "/view?usp=sharing" link resolves without it.
+    gdown.download(download_link, output_path, quiet=False)
     return output_path
 
 
