@@ -3,8 +3,15 @@
 mkdir -p $HOME/.irods
 echo '{"irods_host": "data.cyverse.org", "irods_port": 1247, "irods_user_name": "$IPLANT_USER", "irods_zone_name": "iplant"}' | envsubst > $HOME/.irods/irods_environment.json
 
+# Some helpful environment variables.
+TUTORIAL=PRISMATIC_tutorial
+EX_DATA=/data-store/iplant/home/shared/workshop_material/prismatic_tutorial
+
 # Copy the PRISMATIC_tutorial folder into the data store directory.
 cp -pr $HOME/PRISMATIC_tutorial $HOME/data-store/
+
+# Create a symbolic link to the example data folder in the data store.
+ln -s "$EX_DATA" "$HOME/data-store/$TUTORIAL/data"
 
 # Copy credentials from data-store mount (if they exist)
 if [ -f /data-store/iplant/home/$IPLANT_USER/.gitconfig ]; then
