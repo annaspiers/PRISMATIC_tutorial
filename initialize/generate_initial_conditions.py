@@ -196,10 +196,10 @@ def prepare_spatial_data_for_ic(site, year_inv, year_aop, ic_type, data_raw_aop_
                 generate_wall2wall_plots(aoi_shp_path,plot_length,ic_type,ic_type_path)
 
             elif ic_type == "rs_wall2wall":
-                tile_bbox = box(323000, 4097000, 324000, 4098000)
+                tile_bbox = box(321000, 4097000, 322000, 4098000)
                 aoi_gdf = gpd.GeoDataFrame(geometry=[tile_bbox], crs="EPSG:32611")
                 aoi_shp_dir = os.path.join(data_raw_aop_path, site, year_aop, "shape")
-                aoi_shp_path = os.path.join(aoi_shp_dir, "tile_323000_4097000.shp")
+                aoi_shp_path = os.path.join(aoi_shp_dir, "tile_321000_4097000.shp")
                 aoi_gdf.to_file(aoi_shp_path)
                 generate_wall2wall_plots(aoi_shp_path,plot_length,ic_type,ic_type_path)
             
