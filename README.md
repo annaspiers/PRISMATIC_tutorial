@@ -3,8 +3,12 @@
 [![Python Package using Conda](https://github.com/RS-PRISMATIC/preprocessing/actions/workflows/python-package-conda.yml/badge.svg)](https://github.com/RS-PRISMATIC/preprocessing/actions/workflows/python-package-conda.yml)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/RS-PRISMATIC/preprocessing/HEAD)
 
+# CyVerse Workshop
+
+<a href="https://de.cyverse.org/apps/de/29496b2c-86f4-11f1-a465-008cfa5ae3e1/launch?saved-launch-id=e5434bd9-15bc-426a-92ef-009b1d4851a7" target="_blank" rel="noopener noreferrer"><img src="https://de.cyverse.org/Powered-By-CyVerse-blue.svg"></a>
+
 # PRISMATIC-Initialization
-Generating initial conditions for FATES 
+Generating initial conditions for FATES
 
 # Install
 ```
@@ -35,7 +39,7 @@ Cannot install leafR:
 
 Data procesing workflow:
 [Workflow diagram of functions](https://drive.google.com/file/d/1Ttap0vm3rWWv8yI-nDyoWKjv-z10Mz5l/view?usp=sharing)
-- For each site, download NEON data: 
+- For each site, download NEON data:
     - `download_lidar`: discrete return lidar
     - `download_hyperspectral`: tiles or flightlines
     - `download_veg_structure_data`: woody veg data
@@ -56,7 +60,7 @@ Data procesing workflow:
 - For all sites at once, `train_pft_classifier`: train PFT classifier
 - For a single target site and year, `generate_initial_conditions`: generate FATES initial conditions (cohort and patch files) by combining forest structure and composition
 
-We generate FATES intital conditions in three types: 
+We generate FATES intital conditions in three types:
 - `ic_type == field_inv_plots`: initialization from NEON forest *inventory plots*
 - `ic_type == rs_inv_plots`: initialization from *remote sensing data* over NEON forest inventory plots
 - `ic_type == rs_tower_ftpt`: initialization from remote sensing data over NEON *eddy covariance tower footprint*

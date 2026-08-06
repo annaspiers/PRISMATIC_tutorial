@@ -195,7 +195,7 @@ divide_patch_into_cohorts <- function(plots_laz_path, ic_type) {
     by_patch_df <- data.frame()
     #height_step <- 0.5 #m #for height step in lad_csv
     
-    for (c in 1:length(lad_laz_plot_paths)) {
+    for (c in seq_along(lad_laz_plot_paths)) {
         print(c)
         
         # Load leaf area density files
@@ -295,7 +295,6 @@ divide_patch_into_cohorts <- function(plots_laz_path, ic_type) {
                     mutate(patch = ifelse(ic_type=="rs_inv_plots",
                                           sub(".*/(.*)$", "\\1", lad_laz_plot_paths[c]),
                                           sub(".*/plot_(\\d+)_.*","\\1",lad_laz_plot_paths[c])),
-                           ,
                            patch_bottom_left=ifelse(ic_type=="rs_inv_plots",NA,
                                                     sub(".*?(\\d{6}_\\d{7}).*", "\\1", 
                                                         lad_laz_plot_paths[c]))) %>%
@@ -525,19 +524,19 @@ assign_pft_across_cohorts <- function(by_patch_df, allom_params,
                             values_to="f_s")
     params_est_f_o <- if(any(colnames(params_est) %in% c("f_o_a", "f_o_b"))) params_est %>%
         dplyr::select(patch=p, any_of(c("f_o_a", "f_o_b"))) %>%
-        tidyr::pivot_longer(cols=c(f_o_a,f_o_b), names_prefix = "f_o_", names_to="layer",
+        tidyr::pivot_longer(cols=any_of(c("f_o_a","f_o_b")), names_prefix = "f_o_", names_to="layer",
                             values_to="f_o")
     params_est_f_c <- if(any(colnames(params_est) %in% c("f_c_a", "f_c_b", "f_c_c"))) params_est %>%
         dplyr::select(patch=p, any_of(c("f_c_a", "f_c_b", "f_c_c"))) %>%
-        tidyr::pivot_longer(cols=c(f_c_a,f_c_b,f_c_c), names_prefix = "f_c_", names_to="layer",
+        tidyr::pivot_longer(cols=any_of(c("f_c_a","f_c_b","f_c_c")), names_prefix = "f_c_", names_to="layer",
                             values_to="f_c")
     params_est_f_p <- if(any(colnames(params_est) %in% c("f_p_a", "f_p_b", "f_p_c"))) params_est %>%
         dplyr::select(patch=p, any_of(c("f_p_a", "f_p_b", "f_p_c"))) %>%
-        tidyr::pivot_longer(cols=c(f_p_a, f_p_b, f_p_c), names_prefix = "f_p_", names_to="layer",
+        tidyr::pivot_longer(cols=any_of(c("f_p_a","f_p_b","f_p_c")), names_prefix = "f_p_", names_to="layer",
                             values_to="f_p")
     params_est_f_f <- if(any(colnames(params_est) %in% c("f_f_a", "f_f_b", "f_f_c"))) params_est %>%
         dplyr::select(patch=p, any_of(c("f_f_a", "f_f_b", "f_f_c"))) %>%
-        tidyr::pivot_longer(cols=c(f_f_a, f_f_b, f_f_c), names_prefix = "f_f_", names_to="layer",
+        tidyr::pivot_longer(cols=any_of(c("f_f_a","f_f_b","f_f_c")), names_prefix = "f_f_", names_to="layer",
                             values_to="f_f")
     # Filter out NULL dfs
     valid_dfs <- Filter(Negate(is.null), list(breakdown_to_pft_df,params_est_f_s,params_est_f_c, 
@@ -639,14 +638,14 @@ assign_pft_across_cohorts <- function(by_patch_df, allom_params,
 
 extract_perc_pfts <- function(p, classified_tifs, predicted_classes) {
     # Find TIFFs that intersect this plot
-    overlapping_tifs <- classified_tifs[sapply(classified_tifs, function(tif_path) {
+    overlapping_tifs <- classified_tifs[vapply(classified_tifs, function(tif_path) {
         r <- terra::rast(tif_path)
-        rast_bbox <- sf::st_as_sfc(st_bbox(r))
-        any(st_intersects(p, rast_bbox, sparse = FALSE))
-    })]
+        rast_bbox <- sf::st_as_sfc(sf::st_bbox(r), crs = sf::st_crs(p))
+        isTRUE(any(sf::st_intersects(p, rast_bbox, sparse = FALSE)))
+    }, logical(1))]
     
     if (length(overlapping_tifs) == 0) {
-        warning(paste("No overlapping TIFFs found for plot", i))
+        warning(paste("No overlapping TIFFs found for plot", p$plotID))
         return(NULL)
     }
     
@@ -663,7 +662,7 @@ extract_perc_pfts <- function(p, classified_tifs, predicted_classes) {
     
     # Skip if clipped raster is empty
     if (is.na(minmax(clipped_rast)[1])) {
-        warning(paste("Tif is empty where plot overlaps. Skipping plot", i))
+        warning(paste("Tif is empty where plot overlaps. Skipping plot", p$plotID))
         return(NULL)
     }
     
@@ -827,7 +826,18 @@ generate_pcss_rs <- function(site, year, data_int_path, biomass_path, ic_type, i
     # allom_path <- file.path(data_int_path,"AllometricParameters_SOAPeqns_byMarcos_ais.csv") # ais TODO: find this file
     allom_path <- file.path(data_int_path,"AllometricParameters_Fates_PB+AHB - SOAP equations.csv") # workaround
     warning("Using workaround allometric parameters file. Replace with AllometricParameters_SOAPeqns_byMarcos_ais.csv when found.")
-    allom_params <- read.csv(allom_path)
+ param_rows <- c("h1","h2","d1","d2","l1","l2","x1","x2","a1","a2","Dmax","Hmax","SLA")
+    allom_raw <- read.csv(allom_path, row.names = NULL)
+    colnames(allom_raw)[1] <- "param"
+    allom_params <- allom_raw %>%
+        dplyr::filter(param %in% param_rows) %>%
+        dplyr::distinct(param, .keep_all = TRUE) %>%
+        tidyr::pivot_longer(-param, names_to = "pft", values_to = "value") %>%
+        tidyr::pivot_wider(names_from = param, values_from = value) %>%
+        dplyr::mutate(pft = tolower(pft),
+                      dplyr::across(-pft, as.numeric))
+    # ais how to access this data reproducibly? I just manually put this file in that folder
+
     # ais how to access this data reproducibly? I just manually put this file in that folder
     
     # load plots shp
@@ -849,8 +859,8 @@ generate_pcss_rs <- function(site, year, data_int_path, biomass_path, ic_type, i
     perc_pfts_per_patch <- summary_df %>%
         dplyr::rename(pft = class) %>%
         dplyr::mutate(percent = percent/100,
-                      patch = paste0(plotID,"_",subplotID)) %>%
-                      #patch=as.character(patch)) %>% 
+                      #patch = paste0(plotID,"_",subplotID)) %>%
+                      patch=as.character(plotID)) %>% 
         
         # Remove NA classes and recalibrate percent values
         dplyr::filter(!is.na(pft)) %>%
