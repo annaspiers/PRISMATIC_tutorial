@@ -13,16 +13,19 @@ The pipeline combines LiDAR point cloud processing, hyperspectral imagery, and f
 
 Workshop presented at the annual Ecological Society of America Meeting in July 2026 in Salt Lake City, UT by A Spiers.
 
-## Environment setup
-```
-conda env create -f environment.yml
-```
-
-The environment (Python 3.10, conda-forge) includes PDAL, GDAL, geopandas, rasterio, scikit-learn, rpy2, hydra-core, and R packages (randomForest, caret, terra, sf). R helper scripts are called from Python via rpy2 using helper scripts (*_helper.R) in initialize/.
+## Container access
+1. Sign up for CyVerse account: https://user.cyverse.org/signup
+1. Enroll in workshop: https://user.cyverse.org/workshops/214
+1. Wait for approval (subscriptions approved automatically each hour)
+1. Go to Discovery Environment: https://de.cyverse.org/dashboard
+1. Search "PRISMATIC Tutorial"
+1. Launch app
 
 ## Running the Tutorial
 
 The tutorial is presented as a Jupyter notebook (`prismatic_workshop.ipynb`) that walks through each step sequentially for a single tile. Individual pipeline steps can also be run via the Python scripts in `initialize/`.
+
+The environment (Python 3.10, conda-forge) includes PDAL, GDAL, geopandas, rasterio, scikit-learn, rpy2, hydra-core, and R packages (randomForest, caret, terra, sf). R helper scripts are called from Python via rpy2 using helper scripts (*_helper.R) in initialize/.
 
 
 ### Processing Modules (initialize/)
